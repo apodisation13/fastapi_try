@@ -1,2 +1,12 @@
-fastapi==0.88.0
+fastapi
 uvicorn
+
+#static files
+aiofiles
+
+#database
+sqlalchemy
+psycopg2-binary
+
+#for loading environment variables
+python-dotenv

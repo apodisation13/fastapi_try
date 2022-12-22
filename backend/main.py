@@ -1,22 +1,24 @@
-from typing import Union
-
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
-from apps.accounts.models import CustomUser
-
-app = FastAPI()
-
-
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
+from db.base_class import Base
+from db.session import engine
+from config.settings import settings
 
 
-@app.post("/users/")
-async def post_user(user: CustomUser):
-    return user
+def configure_static(app):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
-@app.get("/users/")
-async def get_users():
-    ...
+def create_tables():
+    Base.metadata.create_all(bind=engine)
+
+
+def start_app():
+    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+    configure_static(app)
+    create_tables()
+    return app
+
+
+app = start_app()
