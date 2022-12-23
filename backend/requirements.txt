@@ -1,12 +1,16 @@
 fastapi
 uvicorn
 
-#static files
+# static files
 aiofiles
 
-#database
+# database
 sqlalchemy
 psycopg2-binary
 
-#for loading environment variables
+# for loading environment variables
 python-dotenv
+
+# password validation, email validation
+passlib[bcrypt]
+pydantic[email]
