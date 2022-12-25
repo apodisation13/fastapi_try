@@ -1,6 +1,9 @@
 fastapi
 uvicorn
 
+# для миграций
+alembic
+
 # static files
 aiofiles
 
