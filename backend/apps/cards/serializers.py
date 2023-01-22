@@ -1,3 +1,5 @@
+from typing import Optional, List
+
 from pydantic import BaseModel, root_validator, Field, validator
 
 from apps.core.serializers import FactionList, TypeList
@@ -45,3 +47,19 @@ class CreateCard(BaseModel):
     name: str
     faction_id: int
     type_id: int
+
+
+class ListDecks(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    cards: List[CardsList]
+
+    class Config:
+        orm_mode = True
+
+
+class CreateDeck(BaseModel):
+    name: str
+    description: Optional[str] = None
+    cards: List[int]
