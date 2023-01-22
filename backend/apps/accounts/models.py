@@ -10,4 +10,4 @@ class User(Base):
     password = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)
-    # scraps = Column(Integer, nullable=False, default=1000)
+    scraps = Column(Integer, nullable=True, default=1000)
