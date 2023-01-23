@@ -1,16 +1,22 @@
-from sqlalchemy.orm import Session
+from fastapi import HTTPException
+from sqlalchemy.orm import Session, joinedload, contains_eager
 
 from apps.cards.models import Card, Deck, CardDeck
 from apps.cards.serializers import CreateCard, CreateDeck
 
 
 def list_cards(db: Session):
-    cards = db.query(Card).all()
+    cards = db.query(Card).\
+        options(
+            joinedload(Card.faction),
+            joinedload(Card.color),
+            joinedload(Card.type),
+        ).\
+        all()
     return cards
 
 
 def create_card(card: CreateCard, db: Session):
-    print(card, db, 'createcard')
     card = Card(
         name=card.name,
         faction_id=card.faction_id,
@@ -22,7 +28,9 @@ def create_card(card: CreateCard, db: Session):
 
 
 def list_decks(db: Session):
-    decks = db.query(Deck).all()
+    decks = db.query(Deck).join(CardDeck, Card).options(
+        # joinedload(Card.faction),
+    ).all()
     return decks
 
 
@@ -43,3 +51,13 @@ def create_deck(deck: CreateDeck, db: Session):
     db.commit()
     return deck
     # return list_decks(db)
+
+
+def delete_deck(deck_id: int, db: Session):
+    print(deck_id)
+    deck = db.get(Deck, deck_id)
+    if not deck:
+        raise HTTPException(status_code=404, detail="Deck not found")
+    db.delete(deck)
+    db.commit()
+    return {"ok": 204}

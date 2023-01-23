@@ -1,12 +1,10 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from sqladmin import Admin, ModelView
+from sqladmin import Admin
 
-from apps.core.models import Faction
 from config.settings import settings
 from config.urls import api_router
 from db.session import engine
-from apps.core.admin import UserAdmin, ColorAdmin
 
 
 def configure_static(app):
@@ -26,5 +24,5 @@ def start_app():
 
 app = start_app()
 admin = Admin(app, engine)
-admin.add_view(UserAdmin)
-admin.add_view(ColorAdmin)
+import apps.core.admin
+import apps.cards.admin

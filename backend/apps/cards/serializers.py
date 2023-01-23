@@ -2,19 +2,20 @@ from typing import Optional, List
 
 from pydantic import BaseModel, root_validator, Field, validator
 
-from apps.core.serializers import FactionList, TypeList
+from apps.core.serializers import FactionList, TypeList, ColorList
 
 
 class CardsList(BaseModel):
     id: int
-    name: str = Field(alias='neeeeeeeeee')
+    name: str = Field(alias='neeeeeeeeee')  # ЭТО ЕСЛИ надо переименовать какое-то поле на neeeeeeeee
     faction: FactionList
     type: TypeList
-    # non_existent_field: int = 1
+    color: ColorList
+    # non_existent_field: int = 1  # это если добавить как-то вообще кастомное поле
 
     class Config:
         orm_mode = True
-        allow_population_by_field_name = True
+        allow_population_by_field_name = True  # это надо чтобы можно было юзать алиас
 
     @validator('type')
     def type_(cls, t):
@@ -24,6 +25,11 @@ class CardsList(BaseModel):
     def faction_(cls, f):
         return f.name
 
+    @validator('color')
+    def color_(cls, c):
+        return c.name
+
+    # ЕЩЁ СПОСОБЫ
     # def from_orm(cls, *args, **kwargs):
     #     print(cls)
     #     return { "a": "b" }
@@ -32,6 +38,7 @@ class CardsList(BaseModel):
     #     print(type(self))
     #     return {"id": self.id, "name": self.name, "faction": self.faction.name}
 
+    # И ЕЩЁ СПОСОБ, кстати крутой, тут вообще все values, аналог to_representation
     # @root_validator
     # def validate_date(cls, values):
     #     # f = values.pop("faction")

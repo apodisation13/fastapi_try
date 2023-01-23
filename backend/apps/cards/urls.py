@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from apps.cards.serializers import CardsList, CreateCard, ListDecks, CreateDeck
-from apps.cards.views import list_cards, create_card, list_decks, create_deck
+from apps.cards.views import list_cards, create_card, list_decks, create_deck, delete_deck
 from db.session import get_db
 
 router = APIRouter()
@@ -17,9 +17,7 @@ def get_cards(db: Session = Depends(get_db)):
 
 @router.post("/cards", response_model=CardsList)
 def create_new_card(card: CreateCard, db: Session = Depends(get_db)):
-    print(card, db, 'до')
     card = create_card(card=card, db=db)
-    print(card, 'после')
     return card
 
 
@@ -31,7 +29,11 @@ def get_decks(db: Session = Depends(get_db)):
 @router.post("/decks", response_model=ListDecks)
 # @router.post("/decks", response_model=List[ListDecks])
 def create_new_deck(deck: CreateDeck, db: Session = Depends(get_db)):
-    print(deck, 'before create')
     deck = create_deck(deck=deck, db=db)
-    print(deck, 'after-create')
     return deck
+
+
+@router.delete("/decks/{deck_id}")
+def delete_d(deck_id: int, db: Session = Depends(get_db)):
+    msg = delete_deck(deck_id=deck_id, db=db)
+    return msg

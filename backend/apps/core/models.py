@@ -13,6 +13,9 @@ class Type(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
 
+    def __str__(self):
+        return f"{self.id} - {self.name}"
+
 
 class Faction(Base):
     id = Column(Integer, primary_key=True, index=True)

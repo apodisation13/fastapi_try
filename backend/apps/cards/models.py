@@ -8,7 +8,8 @@ from db.base_class import Base
 class Card(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, nullable=False)
-    color = Column(Integer, ForeignKey(Color.id))
+    color_id = Column(Integer, ForeignKey("color.id"))
+    color = relationship("Color")
     faction_id = Column(Integer, ForeignKey("faction.id"))
     faction = relationship("Faction")
     type_id = Column(Integer, ForeignKey(Type.id))
@@ -24,6 +25,9 @@ class Deck(Base):
     name = Column(String, unique=True, nullable=False)
     description = Column(String, nullable=True)
     cards = relationship("Card", secondary="carddeck", back_populates="decks")
+
+    def __str__(self):
+        return f"{self.id} - {self.name}"
 
 
 class CardDeck(Base):
