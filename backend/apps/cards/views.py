@@ -28,8 +28,13 @@ def create_card(card: CreateCard, db: Session):
 
 
 def list_decks(db: Session):
-    decks = db.query(Deck).join(CardDeck, Card).options(
-        # joinedload(Card.faction),
+    decks = db.query(Deck).join(Deck.cards).options(
+        contains_eager(Deck.cards, Card.faction),
+        contains_eager(Deck.cards, Card.color),
+        contains_eager(Deck.cards, Card.type),
+            # joinedload(Card.faction),
+            # joinedload(Card.color),
+            # joinedload(Card.type),
     ).all()
     return decks
 
